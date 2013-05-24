@@ -26,6 +26,7 @@ module.exports = function anonymous(model){
 }
 
 function resolvePath(path,query,params){
+  query = query || {}; params = params || {};
   var ret = path.replace(/:(\w)+/ig, function(_,key){ 
               return params[key] || ':' + key; 
             });
@@ -34,7 +35,7 @@ function resolvePath(path,query,params){
     if (params[k]) 
       qvars.push( [esc(query[k]),esc(params[k])].join('=') );
   }
-  ret = ret + '?' + qvars.join('&');
+  ret = ret + (qvars.length ? '?' + qvars.join('&') : '');
   return ret;
 }
 

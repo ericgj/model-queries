@@ -5,6 +5,7 @@
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {
+    "visionmedia/superagent": "*",
     "component/collection": "*",
     "component/model": "*"
   },

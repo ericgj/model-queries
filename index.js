@@ -6,8 +6,8 @@ module.exports = function anonymous(model){
   
   model.query = function(meth,path,query){
     this[meth] = function(params,fn){
-      var path = resolvePath(path,query,params);
-      return this.select(path,fn);
+      var rpath = resolvePath(path,query,params);
+      return this.select(rpath,fn);
     }
   }
 

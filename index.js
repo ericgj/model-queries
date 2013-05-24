@@ -1,5 +1,6 @@
 var request = require('superagent')
   , Collection = require('collection')
+  , esc     = encodeURIComponent
 
 module.exports = function anonymous(model){
   
@@ -30,7 +31,8 @@ function resolvePath(path,query,params){
             });
   qvars = [];
   for (var k in query){
-    if (params[k]) qvars.push( [query[k],params[k]].join('=') );
+    if (params[k]) 
+      qvars.push( [esc(query[k]),esc(params[k])].join('=') );
   }
   ret = ret + '?' + qvars.join('&');
   return ret;

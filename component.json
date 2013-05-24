@@ -1,7 +1,7 @@
 {
-  "name": "model-collections",
-  "repo": "ericgj/model-collections",
-  "description": "Custom model collection endpoints for component/model",
+  "name": "model-queries",
+  "repo": "ericgj/model-queries",
+  "description": "Custom collection endpoints for component/model",
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {

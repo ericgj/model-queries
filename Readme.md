@@ -17,14 +17,17 @@ var queries = require('model-queries');
 
 Post.use(queries);
 
-Post.query('page', 'all');
+Post.collection('page', 'all');
 
-Post.page().param({page: 2, limit: 20}).run( callback );
+Post.page().query({page: 2, limit: 20}).run( callback );
   //=>  GET /page/all?page=2&limit=20
 
-/* or parameter by parameter */
-
-Post.page().param('page',2).param('limit',20).run( callback );
+/* 
+ * Or specify parameters separately 
+ * Interface is identical to superagent `request.query`
+ *
+ */
+Post.page().query({page: 2}).query({limit: 20}).run( callback );
 
 ```
 
@@ -36,7 +39,7 @@ var queries = require('model-queries');
 
 Post.use(queries);
 
-Post.query('forUser', '/user/:id/post/all');
+Post.collection('forUser', '/user/:id/post/all');
   
 Post.forUser({id: 123}).run( callback );
   //=>  GET /user/123/post/all?p=2&n=20
@@ -46,7 +49,7 @@ Post.forUser({id: 123}).run( callback );
 ### Sub-entities with query strings
 
 ``` javascript
-Post.forUser({id: 123}).param({p: 2, n: 20}).run( callback );
+Post.forUser({id: 123}).query({p: 2, n: 20}).run( callback );
   //=>  GET /user/123/post/all?p=2&n=20
 
 ```

@@ -1,6 +1,5 @@
 var request = require('superagent')
   , Collection = require('collection')
-  , esc     = encodeURIComponent
 
 module.exports = function anonymous(model){
   

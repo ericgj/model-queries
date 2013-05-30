@@ -17,8 +17,8 @@ module.exports = function anonymous(model){
 
   Query.prototype.resolvedPath = function(){
     var params = this.params || {}, path = this.path, ids = this.ids;
-    var ret = path.replace(/:(\w)+/ig, function(_,key){ 
-                return ids[key] || ':' + key; 
+    var ret = path.replace(/:(\w+)/g, function(_,key){ 
+                return ids[key] == null ? key : ids[key];
               });
     return ret;
   }
@@ -33,18 +33,20 @@ module.exports = function anonymous(model){
     var model = this.model
       , path = this.resolvedPath()
       , url  = (path[0] == '/' ? path : model.url(this.resolvedPath()));
-    this.request.get(url).end( 
-      function(res){
-        if (res.error) return fn(error(res));
-        var col = new Collection;
-        for (var i = 0, len = res.body.length; i < len; ++i) {
-          col.push(new model(res.body[i]));
-        }
-        fn(null, col);
+    this.request.get(url, function(res){
+      if (res.error) return fn(error(res));
+      var col = new Collection;
+      for (var i = 0, len = res.body.length; i < len; ++i) {
+        col.push(new model(res.body[i]));
       }
-    );
+      fn(null, col);
+    });
     return this;
   }
 
 }
+
+function error(res) {
+  return new Error('got ' + res.status + ' response');
+};
 

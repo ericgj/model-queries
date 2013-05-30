@@ -9,7 +9,9 @@
     "component/collection": "*",
     "component/model": "*"
   },
-  "development": {},
+  "development": {
+    "component/assert": "*"  
+  },
   "license": "MIT",
   "scripts": [
     "index.js"

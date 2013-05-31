@@ -23,11 +23,11 @@ Post.page().query({page: 2, limit: 20}).run( callback );
   //=>  GET /page/all?page=2&limit=20
 
 /* 
- * Or specify parameters separately 
+ * Or specify parameters separately, objects or strings
  * Interface is identical to superagent `request.query`
  *
  */
-Post.page().query({page: 2}).query({limit: 20}).run( callback );
+Post.page().query({page: 2}).query('limit=20').run( callback );
 
 ```
 
@@ -42,7 +42,7 @@ Post.use(queries);
 Post.collection('forUser', '/user/:id/post/all');
   
 Post.forUser({id: 123}).run( callback );
-  //=>  GET /user/123/post/all?p=2&n=20
+  //=>  GET /user/123/post/all
 
 ```
 

@@ -66,7 +66,7 @@ describe('Sub-entity query', function(){
   })
 
   it('Pet.page().query({page:1, limit:2}) should respond with a collection of pets starting from the 2nd page of 2', function(done){
-    Pet.page().query({page: 1, limit: 2}).run(function(err, pets){
+    Pet.page().query({page: 1}).query('limit=2').run(function(err, pets){
       assert(!err);
       assert(pets);
       assert(1 == pets.length());

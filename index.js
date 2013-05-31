@@ -31,9 +31,9 @@ module.exports = function anonymous(model){
   Query.prototype.run = function(fn) {
     var model = this.model
       , path = this.resolvedPath()
-      , url  = (path[0] == '/' ? path : model.url(this.resolvedPath()));
+      , url  = (path[0] == '/' ? path : model.url(path));
     var req = request.get(url)
-    for (var i=0;i<this._query.length;++i) req = req.query(this._query[i]);
+    for (var i=0;i<this._query.length;++i) req.query(this._query[i]);
     req.end(function(res){
       if (res.error) return fn(error(res));
       var col = new Collection;

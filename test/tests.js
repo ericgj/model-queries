@@ -19,7 +19,7 @@ Pet.collection('forUser', '/user/:id/pet/all');
 
 Pet.collection('page');
 
-describe('Sub-entity query', function(){
+describe('Queries', function(){
   beforeEach(function(done){
     User.removeAll(done);
     Pet.removeAll(done);

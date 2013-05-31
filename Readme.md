@@ -20,7 +20,7 @@ Post.use(queries);
 Post.collection('page', 'all');
 
 Post.page().query({page: 2, limit: 20}).run( callback );
-  //=>  GET /page/all?page=2&limit=20
+  //=>  GET /post/all?page=2&limit=20
 
 /* 
  * Or specify parameters separately, objects or strings

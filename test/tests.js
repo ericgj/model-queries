@@ -17,13 +17,7 @@ var Pet = model('Pet')
 Pet.use(queries);
 Pet.collection('forUser', '/user/:id/pet/all');
 
-
-function reset(fn) {
-  request.del('/', function(res){
-    fn();
-  });
-}
-
+Pet.collection('page');
 
 describe('Sub-entity query', function(){
   beforeEach(function(done){
@@ -70,4 +64,15 @@ describe('Sub-entity query', function(){
       done();
     });
   })
+
+  it('Pet.page().query({page:1, limit:2}) should respond with a collection of pets starting from the 2nd page of 2', function(done){
+    Pet.page().query({page: 1, limit: 2}).run(function(err, pets){
+      assert(!err);
+      assert(pets);
+      assert(1 == pets.length());
+      assert('jane' == pets.at(0).name());
+      done();
+    });
+  })
+
 })

@@ -29,6 +29,16 @@ app.del('/', function(req, res){
   res.send(200);
 });
 
+
+/**
+ * GET all pets, paged
+ */
+
+app.get('/pet/page', function(req, res){
+  var page = req.param('page',0), limit = req.param('limit',100);
+  res.send(db.pets.slice(page * limit, (page * limit) + limit));
+});
+
 /**
  * DELETE all pets.
  */
@@ -114,6 +124,11 @@ app.post('/user', function(req, res){
 
 
 
+
+/**
+ * PUT a pet into ownership of a user.
+ */
+
 app.put('/user/:userid/pet/:petid', function(req, res){
   var user = db.users[req.params.userid];
   if (!user) return res.send(404, 'cant find user');
@@ -123,6 +138,11 @@ app.put('/user/:userid/pet/:petid', function(req, res){
     .push(req.params.petid);   
   res.send(200);  
 });
+
+
+/**
+ * GET all pets owned by a user.
+ */
 
 app.get('/user/:userid/pet/all', function(req, res){
   var user = db.users[req.params.userid];

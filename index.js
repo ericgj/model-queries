@@ -5,13 +5,13 @@ module.exports = function anonymous(model){
   
   model.collection = function(meth,path){
     this[meth] = function(ids){
-      return new Query(this,path,ids);
+      return new Query(this, path || meth, ids);
     }
   }
 
   function Query(model,path,ids){
     this.model = model; this.path = path; this.ids = ids;
-    this.request = request;
+    this._query = [];
     return this;
   }
 
@@ -23,9 +23,8 @@ module.exports = function anonymous(model){
     return ret;
   }
 
-  Query.prototype.query = function(){
-    var args = [].slice.apply(arguments,0);
-    this.request = this.request.query.apply(this.request,args); 
+  Query.prototype.query = function(val){
+    this._query.push(val);
     return this;
   }
  
@@ -33,7 +32,9 @@ module.exports = function anonymous(model){
     var model = this.model
       , path = this.resolvedPath()
       , url  = (path[0] == '/' ? path : model.url(this.resolvedPath()));
-    this.request.get(url, function(res){
+    var req = request.get(url)
+    for (var i=0;i<this._query.length;++i) req = req.query(this._query[i]);
+    req.end(function(res){
       if (res.error) return fn(error(res));
       var col = new Collection;
       for (var i = 0, len = res.body.length; i < len; ++i) {

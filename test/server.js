@@ -49,6 +49,15 @@ app.del('/pet/all', function(req, res){
   res.send(200);
 });
 
+
+/**
+ *  GET pet count
+ */
+
+app.get('/pet/count', function(req, res){
+  res.send({total: db.pets.length});
+});
+
 /**
  * GET pet :id.
  */

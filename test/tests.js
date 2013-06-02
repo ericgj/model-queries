@@ -19,6 +19,11 @@ Pet.collection('forUser', '/user/:id/pet/all');
 
 Pet.collection('page');
 
+Pet.endpoint('count', 'count', function(res,fn){
+  if (res.error) return fn("error");
+  fn(null, res.body.total);
+});
+
 describe('Queries', function(){
   beforeEach(function(done){
     User.removeAll(done);
@@ -74,5 +79,14 @@ describe('Queries', function(){
       done();
     });
   })
+
+  it('Pet.count endpoint should respond with the total number of pets', function(done){
+    Pet.count().run( function(err, n){
+      assert(!err);
+      assert(3 == n);
+      done();
+    });
+  })
+
 
 })

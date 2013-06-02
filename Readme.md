@@ -93,14 +93,17 @@ Post.withComments({id: 123}).query({comments: 1}).run( callback );
 
 Define a _collection query endpoint_ for the model called as `Model.method`.
 When these queries are run, the response is parsed as a Collection of model
-instances. If path is not given, `Model.url(method)` is the default.
+instances: identically to how `Model.all` parses responses. 
 
 ### Model.endpoint( method, [path], [parse] )
 
-Define a query endpoint for the model with the given parse function for the
-responses. If path is not given, `Model.url(method)` is the default. If no
-parse function is given, the response will be passed to the callback
-directly from superagent.
+Define a _query endpoint_ for the model with the given parse function for the
+responses. If no parse function is given, the response will be passed to the
+callback directly from superagent.
+
+If path is not given, `Model.url(method)` is the default. Note that any
+path that doesn't start with "/" will be treated as relative to the model,
+while any path that _does_ start with "/" will be treated as absolute.
 
 
 ## License

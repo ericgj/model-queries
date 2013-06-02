@@ -3,14 +3,25 @@ var request = require('superagent')
 
 module.exports = function anonymous(model){
   
-  model.collection = function(meth,path){
+  model.endpoint = function(meth,path,parse){
     this[meth] = function(ids){
-      return new Query(this, path || meth, ids);
+      return new Query(this, path || meth, ids, parse);
     }
   }
 
-  function Query(model,path,ids){
-    this.model = model; this.path = path; this.ids = ids;
+  model.collection = function(meth,path){
+    this.endpoint(meth, path, function(res,fn){
+      if (res.error) return fn(error(res));
+      var col = new Collection;
+      for (var i = 0, len = res.body.length; i < len; ++i) {
+        col.push(new model(res.body[i]));
+      }
+      fn(null, col);
+    });
+  }
+
+  function Query(model,path,ids,parse){
+    this.model = model; this.path = path; this.ids = ids; this.parse = parse;
     this._query = [];
     return this;
   }
@@ -31,17 +42,11 @@ module.exports = function anonymous(model){
   Query.prototype.run = function(fn) {
     var model = this.model
       , path = this.resolvedPath()
-      , url  = (path[0] == '/' ? path : model.url(path));
+      , url  = (path[0] == '/' ? path : model.url(path))
+      , parse = this.parse;
     var req = request.get(url)
     for (var i=0;i<this._query.length;++i) req.query(this._query[i]);
-    req.end(function(res){
-      if (res.error) return fn(error(res));
-      var col = new Collection;
-      for (var i = 0, len = res.body.length; i < len; ++i) {
-        col.push(new model(res.body[i]));
-      }
-      fn(null, col);
-    });
+    req.end( function(res){ return parse ? parse(res, fn) : fn(res); });
     return this;
   }
 

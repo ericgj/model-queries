@@ -19,37 +19,37 @@ module.exports = function anonymous(model){
       fn(null, col);
     });
   }
+}
 
-  function Query(model,path,ids,parse){
-    this.model = model; this.path = path; this.ids = ids; this.parse = parse;
-    this._query = [];
-    return this;
-  }
+function Query(model,path,ids,parse){
+  path = resolvePath(path,ids);
+  this.base = (path[0] == '/' ? path : this.model.url(path) 
+  this.parse = parse;
+  this.reset();
+}
 
-  Query.prototype.resolvedPath = function(){
-    var params = this.params || {}, path = this.path, ids = this.ids;
-    var ret = path.replace(/:(\w+)/g, function(_,key){ 
-                return ids[key] == null ? key : ids[key];
-              });
-    return ret;
-  }
+Query.prototype.queryString =
+Query.prototype.query = function(val){
+  this._req.query(val);
+  return this;
+}
 
-  Query.prototype.query = function(val){
-    this._query.push(val);
-    return this;
-  }
- 
-  Query.prototype.run = function(fn) {
-    var model = this.model
-      , path = this.resolvedPath()
-      , url  = (path[0] == '/' ? path : model.url(path))
-      , parse = this.parse;
-    var req = request.get(url)
-    for (var i=0;i<this._query.length;++i) req.query(this._query[i]);
-    req.end( function(res){ return parse ? parse(res, fn) : fn(res); });
-    return this;
-  }
+Query.prototype.run = function(fn) {
+  var parse = this.parse;
+  this._req.end( function(res){ return parse ? parse(res, fn) : fn(res); });
+  return this;
+}
 
+Query.prototype.reset = function(){
+  this._req = request.get(this.base);
+  return this;
+}
+
+function resolvePath = function(path,ids){
+  var ret = path.replace(/:(\w+)/g, function(_,key){ 
+              return ids[key] == null ? key : ids[key];
+            });
+  return ret;
 }
 
 function error(res) {

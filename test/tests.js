@@ -88,5 +88,13 @@ describe('Queries', function(){
     });
   })
 
+  it('Query should reset to base after running', function(done){
+    var q = Pet.page();
+    q.query({page: 1}).run(function(err, pets){ 
+      assert('/pet/page' == q.base);
+      assert(q.base == q._req.url);
+      done();
+    })
+  })
 
 })

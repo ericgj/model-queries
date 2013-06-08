@@ -36,7 +36,11 @@ Query.prototype.query = function(val){
 
 Query.prototype.run = function(fn) {
   var parse = this.parse;
-  this._req.end( function(res){ return parse ? parse(res, fn) : fn(res); });
+  var self = this;
+  this._req.end( function(res){ 
+    self.reset();
+    return parse ? parse(res, fn) : fn(res); 
+  });
   return this;
 }
 

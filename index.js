@@ -23,12 +23,12 @@ module.exports = function anonymous(model){
 
 function Query(model,path,ids,parse){
   path = resolvePath(path,ids);
-  this.base = (path[0] == '/' ? path : this.model.url(path) 
+  this.base = (path[0] == '/' ? path : model.url(path)); 
   this.parse = parse;
   this.reset();
 }
 
-Query.prototype.queryString =
+Query.prototype.queryString = 
 Query.prototype.query = function(val){
   this._req.query(val);
   return this;
@@ -45,7 +45,7 @@ Query.prototype.reset = function(){
   return this;
 }
 
-function resolvePath = function(path,ids){
+function resolvePath(path,ids){
   var ret = path.replace(/:(\w+)/g, function(_,key){ 
               return ids[key] == null ? key : ids[key];
             });

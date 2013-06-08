@@ -2,7 +2,7 @@
   "name": "model-queries",
   "repo": "ericgj/model-queries",
   "description": "Custom collection endpoints for component/model",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "keywords": [],
   "dependencies": {
     "visionmedia/superagent": "*",
